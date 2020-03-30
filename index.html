@@ -9,26 +9,29 @@
   </head>
   <body>
     <div id="controls">
+      <label for="rotate-slider" id="rotate-label">Heading</label>
       <div id="rotate" class="control">
         <input
           type="range"
-          min="-90"
-          max="90"
+          min="-45"
+          max="45"
           value="0"
           class="slider"
           id="rotate-slider"
         />
       </div>
-      <div id="slider" class="control">
+      <label for="zoom-slider" id="zoom-label">Zoom</label>
+      <div id="zoom" class="control">
         <input
           type="range"
           min="1"
-          max="2200"
+          max="2100"
           value="1000"
           class="slider"
-          id="myRange"
+          id="zoom-slider"
         />
       </div>
+      <label for="graphic-scale">Graphic Scale</label>
       <div id="graphic-scale" class="control">25'</div>
       <select id="scale-options" class="control">
         <option>choose scale</option>
@@ -36,12 +39,11 @@
         <option value="50">1" = 50'</option>
       </select>
       <div id="scale-ratio" class="control"></div>
-      <a href="#" onclick="clickThrough()">PAN</a>
-      <a href="#" onclick="tool2.activate();">AREA TOOL</a>
-      <!-- <a href="#" onclick="tool2.activate();">AREA TOOL</a> -->
+      <a href="#" onclick="clickThrough()">PAN</a><br />
+      <a href="#" onclick="tool1.activate();">AREA TOOL</a>
     </div>
     <canvas id="myCanvas" resize></canvas>
-    <div id="map"></div>
+    <div id="map" class="full"></div>
 
     <script src="google-map-theme.js"></script>
     <script src="gMap.js"></script>
@@ -51,5 +53,6 @@
       defer
     ></script>
     <script src="paperScript.js"></script>
+    <script src="boxFit.js"></script>
   </body>
 </html>

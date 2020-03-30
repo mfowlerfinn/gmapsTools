@@ -1,19 +1,28 @@
 // console.log(theme);
 let map;
 let myLatLng;
-let zoom;
-let heading;
+let zoom = 18;
+let heading = -7;
 let scaleImperial;
 let ftPerPixel;
+
+document.getElementById("rotate-label").textContent = `Heading: ${heading}`;
+document.getElementById("zoom-label").textContent = `Zoom: ${zoom}`;
+let startZoom = zoom * 100;
+document.getElementById("zoom-slider").value = startZoom;
+document.getElementById("rotate-slider").value = heading;
+
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 38.60333840848405, lng: -90.25402877236166 },
     zoom: 18,
-    styles: theme,
+    // styles: theme,
+    mapTypeId: 'satellite',
     // gestureHandling: 'none',
-    // disableDefaultUI: true,
-    draggable: true
+    disableDefaultUI: true
   });
+  map.setTilt(0);
+
 }
 var options = {
   enableHighAccuracy: true,
@@ -43,7 +52,7 @@ function error(err) {
 }
 
 navigator.geolocation.getCurrentPosition(success, error, options);
-const slider = document.getElementById("myRange");
+const slider = document.getElementById("zoom-slider");
 const rotate = document.getElementById("rotate-slider");
 const scaleOptions = document.getElementById("scale-options");
 
@@ -64,7 +73,10 @@ const getScale = () => {
   const scaleLine = document.getElementById("graphic-scale");
 
   scaleLine.style.width = `${inch}px`;
-  scaleLine.innerText = `${ftPerPixel * inch}ft`;
+  let val = ftPerPixel * inch;
+
+
+  scaleLine.innerText = `${val.toFixed(0)} ft`;
   // console.log({ metersPerPx, ftPerPixel, line });
   // let scaleRatio = 1 / (metersPerPx * pixelRatio);
   // document.getElementById("scale-ratio").innerText = `1:${scaleRatio}`;
@@ -75,14 +87,17 @@ slider.oninput = function() {
   zoom = this.value / 100;
   console.log({ zoom });
   map.setZoom(zoom);
+  document.getElementById("zoom-label").textContent = `Zoom: ${zoom}`;
   getScale();
 };
 
 rotate.oninput = function() {
   heading = this.value;
-  console.log({ heading });
+  // console.log({ heading });
   document.getElementById("map").style.transform = `rotate(${heading}deg)`;
+  document.getElementById("rotate-label").textContent = `Heading: ${heading}`;
   getScale();
+  resizeMap();
 };
 
 scaleOptions.oninput = function() {
@@ -93,3 +108,7 @@ scaleOptions.oninput = function() {
   console.log({ zoom });
   getScale();
 };
+
+
+
+getScale();

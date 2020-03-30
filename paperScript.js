@@ -1,83 +1,44 @@
 // paper.install(window);
 // Keep global references to both tools, so the HTML
 // links below can access them.
-var tool1, tool2;
+let tool1;
 let firstPoint;
 let lastShape;
-let canvas = document.getElementById("myCanvas");
+const canvas = document.getElementById("myCanvas");
 
 function clickThrough() {
   // console.log(e);
   canvas.classList.toggle("click-through");
   console.log(canvas.classList);
+  if (!canvas.classList.contains("click-through")) map.setZoom(zoom);
 }
 
 window.onload = function() {
-  // paper.install(window);
+
   paper.setup(canvas);
-
-  // Create two drawing tools.
-  // tool1 will draw straight lines,
-  // tool2 will draw clouds.
-
-  // Both share the mouseDown event:
-  // var path;
-  with (paper) {
+  console.log("loading tools...");
+  with (paper) {  // instead of polluting global w/ paper.install(window);
     function onMouseDown(event) {
-      // path = new Path();
-      // path.strokeColor = 'black';
-      // path.add(event.point);
       firstPoint = event.point;
-
       console.log(event.point);
-      // rect();
     }
 
-    tool1 = new Tool();
-    tool1.onMouseDown = onMouseDown;
+    let path;
 
-    tool1.onMouseDrag = function(event) {
-      // path.add(event.point);
-      console.log("tool 1");
-    };
-
-    var text = new PointText({
-      point: view.center,
-      justification: "center",
-      fontSize: 30,
-      fillColor: "white"
-    });
-
-    // Define a random point in the view, which we will be moving
-    // the text item towards.
-    var destination = Point.random() * view.size;
-
-    // var rectangle = new Rectangle(firstPoint, event.point);
-    // var path = new Path.Rectangle(rectangle);
-
-    // function rect() {
-    //   path = new Path.Rectangle({
-    //     from: firstPoint,
-    //     to: [400,400],
-    //     strokeColor: 'black'
-    //   });
-    // }
-    var path;
-
-    var areaLabel = new PointText({
+    let areaLabel = new PointText({
       point: view.center,
       justification: "center",
       fontSize: 16,
       fillColor: "black"
     });
 
-    var dimHorzLabel = new PointText({
+    let dimHorzLabel = new PointText({
       point: view.center,
       justification: "center",
       fontSize: 16,
       fillColor: "black"
     });
-    var dimVertLabel = new PointText({
+    let dimVertLabel = new PointText({
       point: view.center,
       justification: "center",
       fontSize: 16,
@@ -85,17 +46,17 @@ window.onload = function() {
       rotation: 90
     });
 
-    tool2 = new Tool();
-    // tool2.minDistance = 20;
-    tool2.onMouseDown = onMouseDown;
+    tool1 = new Tool();
+    // tool1.minDistance = 20;
+    tool1.onMouseDown = onMouseDown;
 
-    tool2.onMouseDrag = function onFrame(event) {
+    tool1.onMouseDrag = function onFrame(event) {
       // use ftPerPixel from global namespace
       // Use the arcTo command to draw cloudy lines
       // path.arcTo(event.point);
       let secondPoint = event.point;
-      var rectangle = new Rectangle(firstPoint, secondPoint);
-      var path = new Path.Rectangle(rectangle);
+      let rectangle = new Rectangle(firstPoint, secondPoint);
+      let path = new Path.Rectangle(rectangle);
       path.fillColor = "#e9e9ff";
       path.selected = true;
       path.insertBelow(areaLabel);
@@ -105,9 +66,13 @@ window.onload = function() {
         down: true
       });
 
-      let boxWidth = rectangle.width * ftPerPixel;
-      let boxHeight = rectangle.height * ftPerPixel;
-      let boxArea = boxHeight * boxWidth;
+      function decimal(x,n) {
+        return Number(x.toFixed(n));
+      }
+
+      let boxWidth = decimal((rectangle.width * ftPerPixel), 1);
+      let boxHeight = decimal((rectangle.height * ftPerPixel), 1);
+      let boxArea = decimal((boxHeight * boxWidth), 0);
 
       areaLabel.content = boxArea;
       areaLabel.position = rectangle.center;
@@ -128,4 +93,5 @@ window.onload = function() {
       console.log(lastShape);
     };
   }
+  resizeMap();
 };
