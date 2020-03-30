@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <script src="./paper/dist/paper-full.js"></script>
+  </head>
+  <body>
+    <div id="controls">
+      <div id="rotate" class="control">
+        <input
+          type="range"
+          min="-90"
+          max="90"
+          value="0"
+          class="slider"
+          id="rotate-slider"
+        />
+      </div>
+      <div id="slider" class="control">
+        <input
+          type="range"
+          min="1"
+          max="2200"
+          value="1000"
+          class="slider"
+          id="myRange"
+        />
+      </div>
+      <div id="graphic-scale" class="control">25'</div>
+      <select id="scale-options" class="control">
+        <option>choose scale</option>
+        <option value="25">1" = 25'</option>
+        <option value="50">1" = 50'</option>
+      </select>
+      <div id="scale-ratio" class="control"></div>
+      <a href="#" onclick="clickThrough()">PAN</a>
+      <a href="#" onclick="tool2.activate();">AREA TOOL</a>
+      <!-- <a href="#" onclick="tool2.activate();">AREA TOOL</a> -->
+    </div>
+    <canvas id="myCanvas" resize></canvas>
+    <div id="map"></div>
+
+    <script src="google-map-theme.js"></script>
+    <script src="gMap.js"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYPGiwrd7bbKD4e1bAZB3baMNJsnmupVQ&callback=initMap"
+      async
+      defer
+    ></script>
+    <script src="paperScript.js"></script>
+  </body>
+</html>
