@@ -1,29 +1,38 @@
-// console.log(theme);
+//authored by Matt Fowlerfinn
 let map;
 let myLatLng;
-let zoom = 18;
-let heading = -7;
+let zoom = 17.7949;
+let heading = 0;
 let scaleImperial;
 let ftPerPixel;
 
-document.getElementById("rotate-label").textContent = `Heading: ${heading}`;
-document.getElementById("zoom-label").textContent = `Zoom: ${zoom}`;
-let startZoom = zoom * 100;
-document.getElementById("zoom-slider").value = startZoom;
-document.getElementById("rotate-slider").value = heading;
+
+function updateZoomSlider(zoom) {
+  document.getElementById("zoom-label").textContent = `Zoom: ${zoom.toFixed(2)}`;
+  document.getElementById("zoom-slider").value = zoom * 100;
+}
+
+function rotateOnStart(deg) {
+  heading = deg;
+  document.getElementById("rotate-label").textContent = `Heading: ${heading}`;
+  document.getElementById("rotate-slider").value = heading;
+  document.getElementById("map").style.transform = `rotate(${heading}deg)`;
+  setInterval(function(){document.getElementById("map").classList.remove("one-sec-trans")}, 1500);
+}
+
+updateZoomSlider(zoom);
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 38.60333840848405, lng: -90.25402877236166 },
     zoom: 18,
     // styles: theme,
-    mapTypeId: 'satellite',
+    mapTypeId: "satellite",
     // gestureHandling: 'none',
     disableDefaultUI: true
   });
   map.setTilt(0);
-
 }
+
 var options = {
   enableHighAccuracy: true,
   timeout: 5000,
@@ -37,18 +46,22 @@ function success(pos) {
   console.log(`Latitude : ${pos.coords.latitude}`);
   console.log(`Longitude: ${pos.coords.longitude}`);
   console.log(`More or less ${pos.coords.accuracy} meters.`);
-  // map.setCenter(myLatLng);
-  // var marker = new google.maps.Marker({
-  //   position: myLatLng,
-  //   map: map,
-  //   title: "Current Location!"
-  // });
- 
-  
+  map.setCenter(myLatLng);
+  var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    title: "Current Location!"
+  });
+  rotateOnStart(heading);
 }
 
 function error(err) {
-  console.warn(`ERROR(${err.code}): ${err.message}`);
+  // console.warn(`ERROR(${err.code}): ${err.message}`);
+  alert("You didn't share your location, so I'll set the location to St. Louis, MO instead.");
+  let stl = { lat: 38.6270, lng: -90.1994 };
+  map.setCenter(stl);
+  rotateOnStart(-17);
+  resizeMap();
 }
 
 navigator.geolocation.getCurrentPosition(success, error, options);
@@ -61,12 +74,6 @@ let inch = 113.5; //ppi/2 macbook 13.3
 
 const getScale = () => {
   let pixelRatio = window.devicePixelRatio;
-  // let metersPerPx = 156543.03392 / Math.pow(2, zoom);
-  // let metersPerPx = 156543.03392 * Math.cos(myLatLng.lat * Math.PI / 180) / Math.pow(2, zoom);
-  // let line = (lot / metersPerPx) * pixelRatio;
-  //16.06  = length of tgp = 7625 ft = ( 1300px)
-  // zoom = Math.log2(156543.03392 * Math.cos(myLatLng.lat * Math.PI / 180) * pixels / meters);
-  // let ftMeters = 3.28084;
   ftPerPixel = 400717.42329 / Math.pow(2, zoom);
   let lot = 25;
   let line = lot * ftPerPixel;
@@ -75,14 +82,9 @@ const getScale = () => {
   scaleLine.style.width = `${inch}px`;
   let val = ftPerPixel * inch;
 
-
   scaleLine.innerText = `${val.toFixed(0)} ft`;
-  // console.log({ metersPerPx, ftPerPixel, line });
-  // let scaleRatio = 1 / (metersPerPx * pixelRatio);
-  // document.getElementById("scale-ratio").innerText = `1:${scaleRatio}`;
 };
 
-// Update the current slider value (each time you drag the slider handle)
 slider.oninput = function() {
   zoom = this.value / 100;
   console.log({ zoom });
@@ -93,7 +95,6 @@ slider.oninput = function() {
 
 rotate.oninput = function() {
   heading = this.value;
-  // console.log({ heading });
   document.getElementById("map").style.transform = `rotate(${heading}deg)`;
   document.getElementById("rotate-label").textContent = `Heading: ${heading}`;
   getScale();
@@ -102,13 +103,11 @@ rotate.oninput = function() {
 
 scaleOptions.oninput = function() {
   scaleImperial = this.value; //in ft per in
-  // ftPerPixel = 400717.42329 / Math.pow(2, zoom);
   zoom = Math.log2((400717.42329 * inch) / scaleImperial);
   map.setZoom(zoom);
   console.log({ zoom });
+  updateZoomSlider(zoom);
   getScale();
 };
-
-
 
 getScale();

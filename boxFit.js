@@ -25,7 +25,7 @@ function boxFit() {
   offsetH = (overflowH - clientH) / 2;
   offsetW = (overflowW - clientW) / 2;
 
-  console.log({clientH, clientW, percentW, percentH});
+  // console.log({clientH, clientW, percentW, percentH});
 }
 
 

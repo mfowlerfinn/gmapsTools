@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Simple Map</title>
+    <title>Fowlerfinn - Area Tools</title>
     <meta name="viewport" content="initial-scale=1.0" />
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="index.css" />
@@ -37,13 +37,27 @@
         <option>choose scale</option>
         <option value="25">1" = 25'</option>
         <option value="50">1" = 50'</option>
+        <option value="100">1" = 100'</option>
+        <option value="200" selected>1" = 200'</option>
       </select>
       <div id="scale-ratio" class="control"></div>
-      <a href="#" onclick="clickThrough()">PAN</a><br />
-      <a href="#" onclick="tool1.activate();">AREA TOOL</a>
+      <button
+        onclick="switchTools(event)"
+        id="pan-button"
+        class="button control"
+      >
+        PAN</button
+      ><br />
+      <button
+        onclick="switchTools(event)"
+        id="area-button"
+        class="button control"
+      >
+        AREA TOOL
+      </button>
     </div>
     <canvas id="myCanvas" resize></canvas>
-    <div id="map" class="full"></div>
+    <div id="map" class="full one-sec-trans"></div>
 
     <script src="google-map-theme.js"></script>
     <script src="gMap.js"></script>
