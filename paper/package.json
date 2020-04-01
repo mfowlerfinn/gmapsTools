@@ -50,7 +50,7 @@
   "deprecated": false,
   "description": "The Swiss Army Knife of Vector Graphics Scripting",
   "devDependencies": {
-    "acorn": "~0.5.0",
+    "acorn": "~7.1.1",
     "canvas": "^2.4.1",
     "del": "^4.1.0",
     "gulp": "^3.9.1",
